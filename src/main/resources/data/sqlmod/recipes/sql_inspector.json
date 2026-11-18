@@ -1,0 +1,23 @@
+﻿{
+    "key":  {
+                "G":  {
+                          "item":  "minecraft:glass_pane"
+                      },
+                "S":  {
+                          "item":  "minecraft:stick"
+                      },
+                "C":  {
+                          "item":  "minecraft:copper_ingot"
+                      }
+            },
+    "pattern":  [
+                    " G ",
+                    " C ",
+                    " S "
+                ],
+    "result":  {
+                   "count":  1,
+                   "item":  "sqlmod:sql_inspector"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

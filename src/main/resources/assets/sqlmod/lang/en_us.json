@@ -1,0 +1,18 @@
+{
+  "block.sqlmod.sql_terminal": "SQL Terminal",
+  "block.sqlmod.sql_output_box": "SQL Output Box",
+  "block.sqlmod.portable_terminal": "Portable SQL Terminal",
+  "block.sqlmod.reciclador": "Transmuter Recycler",
+  "item.sqlmod.chest_linker": "Chest Linker",
+  "item.sqlmod.infection_catalyst": "Infection Catalyst",
+  "item.sqlmod.network_key": "Network Key",
+  "item.sqlmod.wireless_terminal": "Wireless Pocket Terminal",
+  "item.sqlmod.infection_relay": "Infection Network Relay",
+  "item.sqlmod.network_key_ring": "Multi-Network Key Ring",
+  "item.sqlmod.laser_chest_linker": "Long-Range Laser Linker",
+  "item.sqlmod.infection_purifier": "Infection Purifier",
+  "item.sqlmod.network_visor": "Network HUD Visor",
+  "item.sqlmod.sql_inspector": "SQL Inventory Inspector",
+  "item.sqlmod.query_card": "SQL Query Script Card",
+  "creativetab.sql_tab": "SQL Storage"
+}

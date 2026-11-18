@@ -1,0 +1,23 @@
+﻿{
+    "key":  {
+                "G":  {
+                          "item":  "minecraft:glass_pane"
+                      },
+                "R":  {
+                          "item":  "minecraft:redstone"
+                      },
+                "A":  {
+                          "item":  "minecraft:amethyst_shard"
+                      }
+            },
+    "pattern":  [
+                    " A ",
+                    "GAG",
+                    " R "
+                ],
+    "result":  {
+                   "count":  1,
+                   "item":  "sqlmod:network_visor"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

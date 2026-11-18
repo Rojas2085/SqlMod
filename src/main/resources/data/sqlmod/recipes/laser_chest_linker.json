@@ -1,0 +1,26 @@
+﻿{
+    "key":  {
+                "G":  {
+                          "item":  "minecraft:glowstone_dust"
+                      },
+                "L":  {
+                          "item":  "sqlmod:chest_linker"
+                      },
+                "R":  {
+                          "item":  "minecraft:redstone"
+                      },
+                "I":  {
+                          "item":  "minecraft:iron_ingot"
+                      }
+            },
+    "pattern":  [
+                    " G ",
+                    "RLR",
+                    " I "
+                ],
+    "result":  {
+                   "count":  1,
+                   "item":  "sqlmod:laser_chest_linker"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

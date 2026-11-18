@@ -1,0 +1,10 @@
+.gradle/
+build/
+!build/libs/
+build_locked_*/
+run/
+out/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

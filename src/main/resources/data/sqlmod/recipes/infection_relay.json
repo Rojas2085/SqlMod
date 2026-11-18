@@ -1,0 +1,23 @@
+﻿{
+    "key":  {
+                "C":  {
+                          "item":  "sqlmod:infection_catalyst"
+                      },
+                "I":  {
+                          "item":  "minecraft:iron_ingot"
+                      },
+                "A":  {
+                          "item":  "minecraft:amethyst_shard"
+                      }
+            },
+    "pattern":  [
+                    " A ",
+                    "ICI",
+                    " I "
+                ],
+    "result":  {
+                   "count":  1,
+                   "item":  "sqlmod:infection_relay"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

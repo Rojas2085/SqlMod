@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "sqlmod:block/reciclador" }
+  }
+}

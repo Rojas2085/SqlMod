@@ -1,0 +1,18 @@
+{
+  "block.sqlmod.sql_terminal": "Terminal SQL",
+  "block.sqlmod.sql_output_box": "Caja de Salida SQL",
+  "block.sqlmod.portable_terminal": "Terminal SQL Portátil",
+  "block.sqlmod.reciclador": "Reciclador Transmutador",
+  "item.sqlmod.chest_linker": "Vinculador de Cofres",
+  "item.sqlmod.infection_catalyst": "Catalizador de Infección",
+  "item.sqlmod.network_key": "Llave de Red",
+  "item.sqlmod.wireless_terminal": "Terminal Inalámbrica de Bolsillo",
+  "item.sqlmod.infection_relay": "Repetidor de Expansión de Red",
+  "item.sqlmod.network_key_ring": "Llavero Multirred",
+  "item.sqlmod.laser_chest_linker": "Vinculador Láser a Distancia",
+  "item.sqlmod.infection_purifier": "Purificador de Infección",
+  "item.sqlmod.network_visor": "Visor HUD de Red",
+  "item.sqlmod.sql_inspector": "Inspector y Diagnóstico SQL",
+  "item.sqlmod.query_card": "Tarjeta de Script SQL",
+  "creativetab.sql_tab": "SQL Storage"
+}

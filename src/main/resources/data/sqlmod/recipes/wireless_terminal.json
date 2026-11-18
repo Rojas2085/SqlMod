@@ -1,0 +1,26 @@
+﻿{
+    "key":  {
+                "T":  {
+                          "item":  "sqlmod:portable_terminal"
+                      },
+                "E":  {
+                          "item":  "minecraft:ender_eye"
+                      },
+                "R":  {
+                          "item":  "minecraft:redstone"
+                      },
+                "I":  {
+                          "item":  "minecraft:iron_ingot"
+                      }
+            },
+    "pattern":  [
+                    " E ",
+                    "RTR",
+                    " I "
+                ],
+    "result":  {
+                   "count":  1,
+                   "item":  "sqlmod:wireless_terminal"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

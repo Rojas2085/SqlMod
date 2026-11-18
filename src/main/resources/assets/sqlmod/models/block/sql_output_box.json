@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "sqlmod:block/sql_output_box_side",
+    "down": "sqlmod:block/sql_output_box_side",
+    "up": "sqlmod:block/sql_output_box_top",
+    "north": "sqlmod:block/sql_output_box_side",
+    "east": "sqlmod:block/sql_output_box_side",
+    "south": "sqlmod:block/sql_output_box_side",
+    "west": "sqlmod:block/sql_output_box_side"
+  }
+}

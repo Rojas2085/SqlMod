@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "sqlmod:block/sql_terminal_side",
+    "down": "sqlmod:block/sql_terminal_side",
+    "up": "sqlmod:block/sql_terminal_side",
+    "north": "sqlmod:block/sql_terminal_front",
+    "east": "sqlmod:block/sql_terminal_side",
+    "south": "sqlmod:block/sql_terminal_side",
+    "west": "sqlmod:block/sql_terminal_side"
+  }
+}

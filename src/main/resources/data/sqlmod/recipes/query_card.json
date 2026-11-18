@@ -1,0 +1,23 @@
+﻿{
+    "key":  {
+                "G":  {
+                          "item":  "minecraft:gold_nugget"
+                      },
+                "R":  {
+                          "item":  "minecraft:redstone"
+                      },
+                "P":  {
+                          "item":  "minecraft:paper"
+                      }
+            },
+    "pattern":  [
+                    " G ",
+                    "RPR",
+                    " G "
+                ],
+    "result":  {
+                   "count":  4,
+                   "item":  "sqlmod:query_card"
+               },
+    "type":  "minecraft:crafting_shaped"
+}

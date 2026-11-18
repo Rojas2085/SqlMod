@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "sqlmod:block/reciclador_side",
+    "down":     "sqlmod:block/reciclador_side",
+    "up":       "sqlmod:block/reciclador_top",
+    "north":    "sqlmod:block/reciclador_front",
+    "east":     "sqlmod:block/reciclador_side",
+    "south":    "sqlmod:block/reciclador_side",
+    "west":     "sqlmod:block/reciclador_side"
+  }
+}

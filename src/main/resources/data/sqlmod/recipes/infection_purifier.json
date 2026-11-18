@@ -1,0 +1,23 @@
+﻿{
+    "key":  {
+                "G":  {
+                          "item":  "minecraft:glass_bottle"
+                      },
+                "I":  {
+                          "item":  "minecraft:iron_ingot"
+                      },
+                "N":  {
+                          "item":  "minecraft:golden_apple"
+                      }
+            },
+    "pattern":  [
+                    " I ",
+                    " G ",
+                    " N "
+                ],
+    "result":  {
+                   "count":  1,
+                   "item":  "sqlmod:infection_purifier"
+               },
+    "type":  "minecraft:crafting_shaped"
+}
