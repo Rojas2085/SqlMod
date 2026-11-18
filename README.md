@@ -6,6 +6,7 @@
 ![SQL Engine](https://img.shields.io/badge/Engine-Real_SQL_&_Triggers-00DCE6?style=for-the-badge)
 
 > **🇬🇧 English** | **🇪🇸 Español** (Scroll down for the complete Spanish guide / Desplázate hacia abajo para la guía completa en Español)
+> 📘 **[ Ver Manual Maestro Enciclopédico de SQL, Diccionario `%...%` y Triggers (`MANUAL_SQL.md`)](./MANUAL_SQL.md)**
 
 ---
 
@@ -200,8 +201,8 @@ ROLLBACK                             -- Devolver todos los ítems de la Output B
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/TU_USUARIO/sqlmod.git
-   cd sqlmod
+   git clone https://github.com/Rojas2085/SqlMod.git
+   cd SqlMod
    ```
 2. Compila el proyecto con Gradle (Java 17):
    ```bash
