@@ -98,8 +98,11 @@ public class TriggerEngine {
                             SqlEngine.executeQuery(level, terminalPos, act, executor);
                             fired++;
                         }
-                        if (executor != null && fired > 0) {
-                            notifyPlayer(executor, "§b[Trigger §e" + trigger.name + "§b] §aFired §f" + fired + " action(s).");
+                        if (fired > 0) {
+                            com.rojoh.sqlmod.util.VfxHelper.playTriggerFired(serverLevel, terminalPos);
+                            if (executor != null) {
+                                notifyPlayer(executor, "§b[Trigger §e" + trigger.name + "§b] §aFired §f" + fired + " action(s).");
+                            }
                         }
                     } else {
                         if (executor != null) {

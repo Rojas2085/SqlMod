@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.core.BlockPos;
@@ -1043,6 +1045,7 @@ public class SqlEngine {
         int totalMoved = 0;
         Map<String, Integer> itemCounts = new LinkedHashMap<>();
         int batchSize = extractBatchSize(finalWhere, cleanQuery);
+        Set<BlockPos> affectedOrigins = new HashSet<>();
 
         for (RowMatch match : finalMatches) {
             int toExtract = match.stack.m_41613_();
@@ -1074,6 +1077,7 @@ public class SqlEngine {
                 String iName = rl != null ? rl.m_135815_() : extracted.m_41778_();
                 itemCounts.put(iName, itemCounts.getOrDefault(iName, 0) + moved);
                 totalMoved += moved;
+                affectedOrigins.add(match.chestPos);
             }
             if (!remainder.m_41619_()) {
                 if (insertDestChest == null) {
@@ -1090,8 +1094,10 @@ public class SqlEngine {
         }
 
         if (totalMoved > 0 && level instanceof ServerLevel sLevel) {
-            sLevel.m_5594_(null, terminal.m_58899_(), SoundEvents.f_144243_, SoundSource.BLOCKS, 1.0F, 1.2F);
-            sLevel.m_8767_(ParticleTypes.f_123760_, destPos.m_123341_() + 0.5D, destPos.m_123342_() + 1.0D, destPos.m_123343_() + 0.5D, 30, 0.3D, 0.3D, 0.3D, 0.1D);
+            for (BlockPos origPos : affectedOrigins) {
+                com.rojoh.sqlmod.util.VfxHelper.spawnTransferBeam(sLevel, origPos, destPos);
+            }
+            com.rojoh.sqlmod.util.VfxHelper.playTerminalSuccess(sLevel, terminal.m_58899_());
         }
 
         StringBuilder summary = new StringBuilder();
@@ -1615,6 +1621,7 @@ public class SqlEngine {
 
         ItemStackHandler outHandler = outBox.getItemHandler();
         int returnedStacks = 0;
+        Set<BlockPos> returnOrigins = new HashSet<>();
 
         for (int i = 0; i < outHandler.getSlots(); i++) {
             ItemStack stack = outHandler.getStackInSlot(i);
@@ -1644,6 +1651,7 @@ public class SqlEngine {
                                 outHandler.insertItem(i, remainder, false);
                             } else {
                                 returnedStacks++;
+                                returnOrigins.add(originPos);
                             }
                         }
                     }
@@ -1653,8 +1661,10 @@ public class SqlEngine {
 
         if (returnedStacks > 0) {
             if (level instanceof ServerLevel sLevel) {
-                sLevel.m_5594_(null, outputBoxPos, SoundEvents.f_11852_, SoundSource.BLOCKS, 0.5F, 1.0F);
-                sLevel.m_8767_(ParticleTypes.f_123760_, outputBoxPos.m_123341_() + 0.5D, outputBoxPos.m_123342_() + 1.0D, outputBoxPos.m_123343_() + 0.5D, 40, 0.5D, 0.5D, 0.5D, 0.1D);
+                for (BlockPos origPos : returnOrigins) {
+                    com.rojoh.sqlmod.util.VfxHelper.spawnTransferBeam(sLevel, outputBoxPos, origPos);
+                }
+                com.rojoh.sqlmod.util.VfxHelper.playTerminalSuccess(sLevel, outputBoxPos);
             }
             if (player != null) {
                 player.m_5661_(Component.m_237113_("§aReturned items to their origin chests."), true);
