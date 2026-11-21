@@ -58,6 +58,10 @@ public class SqlEngine {
     }
 
     public static void executeQuery(Level level, BlockPos terminalPos, String query, ServerPlayer player) {
+        if (level instanceof ServerLevel sLevel && com.rojoh.sqlmod.block.entity.NetworkFirewallBlockEntity.isBlocked(sLevel, terminalPos, player)) {
+            sendResponse(player, "§c[FIREWALL] Acceso denegado por política de seguridad.");
+            return;
+        }
         BlockEntity be = level.m_7702_(terminalPos);
         if (be instanceof PortableTerminalBlockEntity portable) {
             executePortableQuery(level, portable, query, player);
@@ -1043,9 +1047,34 @@ public class SqlEngine {
         }
 
         int totalMoved = 0;
+        int overflowMoved = 0;
         Map<String, Integer> itemCounts = new LinkedHashMap<>();
         int batchSize = extractBatchSize(finalWhere, cleanQuery);
         Set<BlockPos> affectedOrigins = new HashSet<>();
+        Set<BlockPos> overflowOrigins = new HashSet<>();
+
+        // Resolve optional Overflow / Desborde chest automatically (no SQL command changes)
+        BlockPos overflowPos = null;
+        IItemHandler overflowHandler = null;
+        if (insertDestChest != null) {
+            for (Map.Entry<String, BlockPos> ovEntry : terminal.getLinkedChests().entrySet()) {
+                String k = ovEntry.getKey();
+                if (k.equalsIgnoreCase("overflow") || k.equalsIgnoreCase("desborde")) {
+                    BlockPos candPos = ovEntry.getValue();
+                    if (!candPos.equals(destPos) && level.m_46749_(candPos)) {
+                        BlockEntity ovBe = level.m_7702_(candPos);
+                        if (ovBe != null) {
+                            LazyOptional<IItemHandler> ovCap = InventoryHelper.getInventory(level, candPos, ovBe, player);
+                            if (ovCap.isPresent()) {
+                                overflowPos = candPos;
+                                overflowHandler = ovCap.orElseThrow(IllegalStateException::new);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         for (RowMatch match : finalMatches) {
             int toExtract = match.stack.m_41613_();
@@ -1053,7 +1082,44 @@ public class SqlEngine {
                 toExtract = (toExtract / batchSize) * batchSize;
                 if (toExtract <= 0) continue;
             }
-            ItemStack extracted = match.chestInv.extractItem(match.slot, toExtract, false);
+
+            // 1. Simulated extraction & destination insertion (Zero-Loss / Zero-Duplication atomicity)
+            ItemStack simExtracted = match.chestInv.extractItem(match.slot, toExtract, true);
+            if (simExtracted.m_41619_()) continue;
+
+            ItemStack simForDest = simExtracted.m_41777_();
+            if (insertDestChest == null) {
+                CompoundTag tag = simForDest.m_41784_();
+                tag.m_128405_("SqlOriginX", match.chestPos.m_123341_());
+                tag.m_128405_("SqlOriginY", match.chestPos.m_123342_());
+                tag.m_128405_("SqlOriginZ", match.chestPos.m_123343_());
+                tag.m_128405_("SqlOriginSlot", match.slot);
+            } else {
+                simForDest.m_41749_("SqlOriginX");
+                simForDest.m_41749_("SqlOriginY");
+                simForDest.m_41749_("SqlOriginZ");
+                simForDest.m_41749_("SqlOriginSlot");
+                if (simForDest.m_41783_() != null && simForDest.m_41783_().m_128456_()) {
+                    simForDest.m_41751_(null);
+                }
+            }
+
+            ItemStack simRemDest = ItemHandlerHelper.insertItemStacked(destHandler, simForDest, true);
+            int acceptedDest = simForDest.m_41613_() - simRemDest.m_41613_();
+
+            int acceptedOverflow = 0;
+            if (!simRemDest.m_41619_() && overflowHandler != null) {
+                ItemStack simRemOv = ItemHandlerHelper.insertItemStacked(overflowHandler, simRemDest.m_41777_(), true);
+                acceptedOverflow = simRemDest.m_41613_() - simRemOv.m_41613_();
+            }
+
+            int totalAccepted = acceptedDest + acceptedOverflow;
+            if (totalAccepted <= 0) continue;
+
+            // 2. Real extraction of ONLY the verified accepted amount
+            ItemStack extracted = match.chestInv.extractItem(match.slot, totalAccepted, false);
+            if (extracted.m_41619_()) continue;
+
             if (insertDestChest == null) {
                 CompoundTag tag = extracted.m_41784_();
                 tag.m_128405_("SqlOriginX", match.chestPos.m_123341_());
@@ -1070,15 +1136,31 @@ public class SqlEngine {
                 }
             }
 
-            ItemStack remainder = ItemHandlerHelper.insertItem(destHandler, extracted, false);
-            int moved = extracted.m_41613_() - remainder.m_41613_();
-            if (moved > 0) {
-                ResourceLocation rl = ForgeRegistries.ITEMS.getKey(extracted.m_41720_());
-                String iName = rl != null ? rl.m_135815_() : extracted.m_41778_();
-                itemCounts.put(iName, itemCounts.getOrDefault(iName, 0) + moved);
-                totalMoved += moved;
+            ResourceLocation rl = ForgeRegistries.ITEMS.getKey(extracted.m_41720_());
+            String iName = rl != null ? rl.m_135815_() : extracted.m_41778_();
+
+            ItemStack remainder = ItemHandlerHelper.insertItemStacked(destHandler, extracted, false);
+            int movedToDest = extracted.m_41613_() - remainder.m_41613_();
+            if (movedToDest > 0) {
+                itemCounts.put(iName, itemCounts.getOrDefault(iName, 0) + movedToDest);
+                totalMoved += movedToDest;
                 affectedOrigins.add(match.chestPos);
             }
+
+            // Route remainder to Overflow chest if available
+            if (!remainder.m_41619_() && overflowHandler != null) {
+                int beforeOv = remainder.m_41613_();
+                remainder = ItemHandlerHelper.insertItemStacked(overflowHandler, remainder, false);
+                int movedOv = beforeOv - remainder.m_41613_();
+                if (movedOv > 0) {
+                    itemCounts.put(iName, itemCounts.getOrDefault(iName, 0) + movedOv);
+                    totalMoved += movedOv;
+                    overflowMoved += movedOv;
+                    overflowOrigins.add(match.chestPos);
+                }
+            }
+
+            // Final safety rollback if anything still remained
             if (!remainder.m_41619_()) {
                 if (insertDestChest == null) {
                     remainder.m_41749_("SqlOriginX");
@@ -1089,7 +1171,7 @@ public class SqlEngine {
                         remainder.m_41751_(null);
                     }
                 }
-                match.chestInv.insertItem(match.slot, remainder, false);
+                ItemHandlerHelper.insertItemStacked(match.chestInv, remainder, false);
             }
         }
 
@@ -1097,7 +1179,13 @@ public class SqlEngine {
             for (BlockPos origPos : affectedOrigins) {
                 com.rojoh.sqlmod.util.VfxHelper.spawnTransferBeam(sLevel, origPos, destPos);
             }
+            if (overflowPos != null) {
+                for (BlockPos ovOrig : overflowOrigins) {
+                    com.rojoh.sqlmod.util.VfxHelper.spawnTransferBeam(sLevel, ovOrig, overflowPos);
+                }
+            }
             com.rojoh.sqlmod.util.VfxHelper.playTerminalSuccess(sLevel, terminal.m_58899_());
+            com.rojoh.sqlmod.block.entity.AuditMailboxBlockEntity.recordTransfer(sLevel, terminal.m_58899_(), insertDestChest, itemCounts, overflowMoved);
         }
 
         StringBuilder summary = new StringBuilder();
@@ -1116,7 +1204,8 @@ public class SqlEngine {
             summary.append("]");
         }
         String targetLabel = insertDestChest == null ? "Output Box" : insertDestChest;
-        sendResponse(player, "Moved " + totalMoved + " items to " + targetLabel + summary + " (" + finalMatches.size() + " stacks matched).");
+        String ovNote = overflowMoved > 0 ? " §6[OVERFLOW: " + overflowMoved + " desviados]" : "";
+        sendResponse(player, "Moved " + totalMoved + " items to " + targetLabel + summary + ovNote + " (" + finalMatches.size() + " stacks matched).");
     }
 
     private static boolean matchesSelector(ItemStack stack, String selector) {

@@ -31,6 +31,10 @@ public class CreativeTabInit {
                         output.m_246326_(ItemInit.SQL_INSPECTOR.get());
                         output.m_246326_(ItemInit.QUERY_CARD.get());
                         output.m_246326_(ItemInit.RECICLADOR.get());
+                        output.m_246326_(ItemInit.AUDIT_MAILBOX.get());
+                        output.m_246326_(ItemInit.CAPACITY_SENSOR.get());
+                        output.m_246326_(ItemInit.NETWORK_FIREWALL.get());
+                        output.m_246326_(ItemInit.SQL_MANUAL.get());
                     })
                     .m_257652_());
 }

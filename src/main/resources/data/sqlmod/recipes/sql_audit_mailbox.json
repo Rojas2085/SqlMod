@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IRI",
+    "IBI",
+    "ICI"
+  ],
+  "key": {
+    "I": { "item": "minecraft:iron_ingot" },
+    "R": { "item": "minecraft:redstone" },
+    "B": { "item": "minecraft:writable_book" },
+    "C": { "item": "minecraft:chest" }
+  },
+  "result": { "item": "sqlmod:sql_audit_mailbox", "count": 1 }
+}

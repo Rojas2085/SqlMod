@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "OIO",
+    "IDI",
+    "ORO"
+  ],
+  "key": {
+    "O": { "item": "minecraft:obsidian" },
+    "I": { "item": "minecraft:iron_ingot" },
+    "D": { "item": "minecraft:diamond" },
+    "R": { "item": "minecraft:redstone_block" }
+  },
+  "result": { "item": "sqlmod:sql_firewall", "count": 1 }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    { "item": "minecraft:book" },
+    { "item": "minecraft:redstone" }
+  ],
+  "result": { "item": "sqlmod:sql_manual", "count": 1 }
+}

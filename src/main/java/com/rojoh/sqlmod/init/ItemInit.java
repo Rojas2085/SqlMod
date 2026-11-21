@@ -56,4 +56,17 @@ public class ItemInit {
 
     public static final RegistryObject<Item> QUERY_CARD = ITEMS.register("query_card",
             () -> new QueryCardItem(new Item.Properties()));
+
+    // New v1.2.0 Blocks & Manual
+    public static final RegistryObject<Item> AUDIT_MAILBOX = ITEMS.register("sql_audit_mailbox",
+            () -> new BlockItem(BlockInit.AUDIT_MAILBOX.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> CAPACITY_SENSOR = ITEMS.register("sql_capacity_sensor",
+            () -> new BlockItem(BlockInit.CAPACITY_SENSOR.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> NETWORK_FIREWALL = ITEMS.register("sql_firewall",
+            () -> new BlockItem(BlockInit.NETWORK_FIREWALL.get(), new Item.Properties()));
+
+    public static final RegistryObject<Item> SQL_MANUAL = ITEMS.register("sql_manual",
+            () -> new SqlManualItem(new Item.Properties()));
 }
